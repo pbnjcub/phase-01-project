@@ -1,1 +1,1 @@
- alert('hi') 
+// This is for our javascript logic
