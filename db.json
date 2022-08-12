@@ -1,0 +1,20 @@
+{
+    "heroes": [
+        {
+            "id": 1,
+            "name": "Captain America",
+            "description": "America's first Avenger",
+            "powers": "super-human strength and amazing leadership abilities",
+            "imageUrl": "https://mlpnk72yciwc.i.optimole.com/cqhiHLc.WqA8~2eefa/w:392/h:526/q:75/https://bleedingcool.com/wp-content/uploads/2016/03/cap.jpg"
+    
+        },
+        {
+            "id": 2,
+            "name": "Wolverine",
+            "description": "He's the best at what he does",
+            "powers": "mutant, healing factor, adamantium claws",
+            "imageUrl": "https://i.pinimg.com/736x/e9/a9/aa/e9a9aa517e3ed89648772019cdd88f5f.jpg"
+    
+        }
+    ]
+}
