@@ -110,19 +110,12 @@ const renderHomePage = (e) => {
     resetMain()
 
     const h3 = document.createElement('h3')
-    const p1 = document.createElement('p')
-    const p2 = document.createElement('p')
-    const p3 = document.createElement('p')
-    const br = document.createElement('br')
+
     h3.innerText = 'Welcome to myHERO'
-    p1.innerText = 'If you are interested in getting to know heroes who have similar interests and powers to your own, this is the place to be.'
-    p2.innerText = 'Click on the "Find Your Hero" link to take the "Personality Quiz" to narrow your search.' 
-    p3.innerText = 'Or you can browse through all our heroes using the "Browse Heroes" tool.'
 
     mainDiv().appendChild(h3)
-    mainDiv().appendChild(p1)
-    mainDiv().appendChild(p2)
-    mainDiv().appendChild(p3)
+    createHomePage()
+
 }
 
 //event listeners
@@ -195,6 +188,21 @@ const createCard = (hero) => {
 
     return divCard
 }
+
+const createHomePage = () => {
+    const p1 = document.createElement('p')
+    const p2 = document.createElement('p')
+    const p3 = document.createElement('p')
+
+    p1.innerText = 'If you are interested in getting to know heroes who have similar interests and powers to your own, this is the place to be.'
+    p2.innerText = 'Click on the "Find Your Hero" link to take the "Personality Quiz" to narrow your search.' 
+    p3.innerText = 'Or you can browse through all our heroes using the "Browse Heroes" tool.'
+
+    mainDiv().appendChild(p1)
+    mainDiv().appendChild(p2)
+    mainDiv().appendChild(p3)
+}
+
 
 const createMessageForm = () => {
     const messageForm = document.createElement('form')
@@ -270,8 +278,6 @@ const createMessageForm = () => {
     divSubjectInput().appendChild(labelSubj)
     mainDiv().appendChild(divMessageRow).appendChild(divMessageInputField).appendChild(textAreaMessage)
     divMessageInput().appendChild(labelMessage)
+    mainDiv().appendChild(divSubmitRow).appendChild(send)
 
 }
-
-{/* <h3>Welcome to myHERO</h3>
-<p>lkjasd;flkja;dslkfj ;lkjdofm kjdkfdjk.</p> */}
