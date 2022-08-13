@@ -6,3 +6,5 @@ div.container {
 div h3 {
     font-weight: bolder
 }
+
+a:hover, a:focus {color: rgb(0, 136, 255);}

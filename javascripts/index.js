@@ -8,8 +8,16 @@ const formLink = () => document.getElementById('findHero')
 const mainDiv = () => document.getElementById('main')
 const browseLink = () => document.getElementById('browseHero')
 const homeLink = () => document.getElementById('home')
+const messageCount = () => document.getElementById('message-count')
+const messageHero = () => document.getElementById('message-hero')
+const divNameRow = () => document.getElementById('name-row')
+const divFirstNameInput = () => document.getElementById('first-name-input')
+const divLastNameInput = () => document.getElementById('last-name-input')
 
 //functions
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
 
 const fetchHeroes = () =>
     fetch(baseUrl + "/heroes")
@@ -45,6 +53,10 @@ const renderHeroes = () => {
     mainDiv().appendChild(row)
 }
 
+const renderMessages = () => {
+
+}
+
 
 //event handlers
 const renderFormPage = (e) => {
@@ -72,6 +84,21 @@ const renderBrowsePage = (e) => {
     mainDiv().appendChild(h3)
 
     renderHeroes()
+
+}
+
+const renderMessagePage = (e) => {
+    e.preventDefault()
+
+    resetMain()
+    const h3 = document.createElement('h3')
+    h3.innerText = 'Message A Hero'
+
+    mainDiv().appendChild(h3)
+
+    createMessageForm()
+
+    renderMessages()
 
 }
 
@@ -113,11 +140,21 @@ const browseHeroEvent = () => {
     browseLink().addEventListener('click', renderBrowsePage)
 }
 
+const messageHeroEvent = () => {
+    messageHero().addEventListener('click', renderMessagePage)
+}
+
+const hideMessageCount = () => {
+    messageCount().style.display = 'none'
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchHeroes()
     attachFormEvent()
     renderHomeEvent()
     browseHeroEvent()
+    hideMessageCount()
+    messageHeroEvent()
 })
 
 //helpers
@@ -157,7 +194,44 @@ const createCard = (hero) => {
     return divCard
 }
 
+const createMessageForm = () => {
+    const messageForm = document.createElement('form')
+    const send = document.createElement('input')
+    const divRow = document.createElement('div')
+    const divFirstInputField = document.createElement('div')
+    const divLastInputField = document.createElement('div')
+    const inputFirstName = document.createElement('input')
+    const labelFirstName = document.createElement('label')
+    const inputLastName = document.createElement('input')
+    const labelLastName = document.createElement('label')
 
+    messageForm.className = 'col s12'
+    divRow.id = 'name-row'
+    divRow.className = 'row'
+    divFirstInputField.className = 'input-field col s6'
+    divFirstInputField.id = 'first-name-input'
+    divLastInputField.className = 'input-field col s6'
+    divLastInputField.id = 'last-name-input'
+    inputFirstName.id = 'first_name'
+    inputFirstName.type = 'text'
+    inputFirstName.class = 'validate'
+    labelFirstName.for = 'first_name'
+    inputLastName.id = 'last_name'
+    inputLastName.type = 'text'
+    inputLastName.class = 'validate'
+    labelLastName.for = 'last_name'
+    send.type = 'button'
+    send.value = 'Send'
+
+    labelFirstName.innerText = 'First Name'
+    labelLastName.innerText = 'Last Name'
+    
+    mainDiv().appendChild(messageForm)
+    mainDiv().appendChild(divRow).appendChild(divFirstInputField).appendChild(inputFirstName)
+    divFirstNameInput().appendChild(labelFirstName)
+    divNameRow().appendChild(divLastInputField).appendChild(inputLastName)
+    divLastNameInput().appendChild(labelLastName)
+}
 
 {/* <h3>Welcome to myHERO</h3>
 <p>lkjasd;flkja;dslkfj ;lkjdofm kjdkfdjk.</p> */}
