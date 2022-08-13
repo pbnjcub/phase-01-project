@@ -13,6 +13,8 @@ const messageHero = () => document.getElementById('message-hero')
 const divNameRow = () => document.getElementById('name-row')
 const divFirstNameInput = () => document.getElementById('first-name-input')
 const divLastNameInput = () => document.getElementById('last-name-input')
+const divSubjectInput = () => document.getElementById('subject-input')
+const divMessageInput = () => document.getElementById('message-input')
 
 //functions
 function insertAfter(newNode, existingNode) {
@@ -196,18 +198,29 @@ const createCard = (hero) => {
 
 const createMessageForm = () => {
     const messageForm = document.createElement('form')
-    const send = document.createElement('input')
-    const divRow = document.createElement('div')
+    const send = document.createElement('button')
+    const divNameRow = document.createElement('div')
+    const divSubjRow = document.createElement('div')
+    const divMessageRow = document.createElement('div')
+    const divSubmitRow = document.createElement('div')
     const divFirstInputField = document.createElement('div')
     const divLastInputField = document.createElement('div')
     const inputFirstName = document.createElement('input')
     const labelFirstName = document.createElement('label')
     const inputLastName = document.createElement('input')
     const labelLastName = document.createElement('label')
+    const divSubjInputField = document.createElement('div')
+    const divMessageInputField = document.createElement('div')
+    const inputSubj = document.createElement('input')
+    const labelSubj = document.createElement('label')
+    const textAreaMessage = document.createElement('textArea')
+    const labelMessage = document.createElement('label')
 
     messageForm.className = 'col s12'
-    divRow.id = 'name-row'
-    divRow.className = 'row'
+    messageForm.id = 'message-form'
+    
+    divNameRow.id = 'name-row'
+    divNameRow.className = 'row'
     divFirstInputField.className = 'input-field col s6'
     divFirstInputField.id = 'first-name-input'
     divLastInputField.className = 'input-field col s6'
@@ -220,17 +233,44 @@ const createMessageForm = () => {
     inputLastName.type = 'text'
     inputLastName.class = 'validate'
     labelLastName.for = 'last_name'
+    
+    divSubjRow.id = 'subject-row'
+    divSubjRow.className = 'row'
+    divSubjInputField.id = 'subject-input'
+    divSubjInputField.className = 'input-field col s12'
+    inputSubj.id = 'subject'
+    inputSubj.type = 'text'
+    inputSubj.class = 'validate'
+    labelSubj.for = 'subject'
+
+    divMessageRow.id = 'message-row'
+    divMessageRow.className = 'row'
+    divMessageInputField.id = 'message-input'
+    divMessageInputField.className = 'input-field col s12'
+    textAreaMessage.id = 'textarea1'
+    textAreaMessage.class = 'materialize-textarea'
+    labelMessage.for = 'subject'
+
+    divSubmitRow.id = 'submit-row'
+    divSubmitRow.className = 'row'
     send.type = 'button'
     send.value = 'Send'
 
     labelFirstName.innerText = 'First Name'
     labelLastName.innerText = 'Last Name'
+    labelSubj.innerText = 'Subject'
+    labelMessage.innerText = 'Message'
     
     mainDiv().appendChild(messageForm)
-    mainDiv().appendChild(divRow).appendChild(divFirstInputField).appendChild(inputFirstName)
+    mainDiv().appendChild(divNameRow).appendChild(divFirstInputField).appendChild(inputFirstName)
     divFirstNameInput().appendChild(labelFirstName)
-    divNameRow().appendChild(divLastInputField).appendChild(inputLastName)
+    mainDiv().appendChild(divNameRow).appendChild(divLastInputField).appendChild(inputLastName)
     divLastNameInput().appendChild(labelLastName)
+    mainDiv().appendChild(divSubjRow).appendChild(divSubjInputField).appendChild(inputSubj)
+    divSubjectInput().appendChild(labelSubj)
+    mainDiv().appendChild(divMessageRow).appendChild(divMessageInputField).appendChild(textAreaMessage)
+    divMessageInput().appendChild(labelMessage)
+
 }
 
 {/* <h3>Welcome to myHERO</h3>
