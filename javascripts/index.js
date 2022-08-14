@@ -3,13 +3,6 @@ let heroes = []
 
 const baseUrl = 'https://gateway.marvel.com'
 let heroUrl = `${baseUrl}/v1/public/characters`
-// If you are using a package manager, require the package
-const md5 = require("blueimp-md5");
-
-// If you are using ES6
-import { md5 } from "blueimp-md5";
-
-// Alternatively in the browser md5 will be available globally in the window
 
 const getHash = (ts, apiPrivateKey, apiKey) => {
     return md5(ts + apiPrivateKey + apiKey).toString()
@@ -20,24 +13,7 @@ let apiPrivateKey = '99082f538e901ab37e9830648166088bf93af8d4'
 let ts = Date.now().toString()
 let hash = getHash(ts, apiPrivateKey, apiKey)
 
-let requestUrl = `${herUrl}?ts=${ts}&apiKey=${apiKey}&hash=${hash}`
-
-// const fetchHeroes =  (value) => {
-   
-
-//     try {
-//         let response = await fetch(url)
-//         let data = await response.json()
-//         return data
-//     } catch (err) {
-//         console.error(err)
-//         return
-//     }
-// }
-
-
-
-
+let requestUrl = `${heroUrl}?ts=${ts}&apiKey=${apiKey}&hash=${hash}`
 
 //node getters
 const formLink = () => document.getElementById('findHero')
