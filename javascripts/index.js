@@ -13,7 +13,7 @@ let apiPrivateKey = '99082f538e901ab37e9830648166088bf93af8d4'
 let ts = Date.now().toString()
 let hash = getHash(ts, apiPrivateKey, apiKey)
 
-let requestUrl = `${heroUrl}?ts=${ts}&apiKey=${apiKey}&hash=${hash}`
+let requestUrl = `${heroUrl}?ts=${ts}&apikey=${apiKey}&hash=${hash}`
 
 //node getters
 const formLink = () => document.getElementById('findHero')
@@ -27,10 +27,6 @@ const divFirstNameInput = () => document.getElementById('first-name-input')
 const divLastNameInput = () => document.getElementById('last-name-input')
 const divSubjectInput = () => document.getElementById('subject-input')
 const divMessageInput = () => document.getElementById('message-input')
-
-//functions
-
-// http://gateway.marvel.com/v1/public/comics?ts=1&apikey=1234&hash=ffd275c5130566a2916217b101f26150
 
 const fetchHeroes = () =>
     fetch(requestUrl)
@@ -58,7 +54,7 @@ const renderHeroes = () => {
     const row = document.createElement('row')
     row.className = 'row'
     
-    heroes.forEach(hero => {
+    heroes.data.results.forEach(hero => {
         const col = renderHero(hero)
 
         row.appendChild(col)
@@ -175,6 +171,9 @@ const createCard = (hero) => {
     const divCardAction = document.createElement('div')
     const linkOne = document.createElement('a')
     const img = document.createElement('img')
+    let imgPath = hero.thumbnail.path
+    let imgExtension = hero.thumbnail.extension
+    let imgUrl = `${imgPath}.${imgExtension}`
 
     divCard.className = 'card'
     divImage.className = 'card-image'
@@ -183,7 +182,7 @@ const createCard = (hero) => {
     divCardAction.className = 'card-action'
 
     linkOne.setAttribute('href','')
-    img.setAttribute('src', hero.imageUrl)
+    img.setAttribute('src', imgUrl)
 
     span.innerText = hero.name
     pDescription.innerText = hero.description
