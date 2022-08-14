@@ -1,6 +1,42 @@
 // This is for our javascript logic
 let heroes = []
-const baseUrl = 'http://localhost:3000'
+
+const baseUrl = 'https://gateway.marvel.com'
+let heroUrl = `${baseUrl}/v1/public/characters`
+// If you are using a package manager, require the package
+const md5 = require("blueimp-md5");
+
+// If you are using ES6
+import { md5 } from "blueimp-md5";
+
+// Alternatively in the browser md5 will be available globally in the window
+
+const getHash = (ts, apiPrivateKey, apiKey) => {
+    return md5(ts + apiPrivateKey + apiKey).toString()
+}
+
+let apiKey = '51cb29fb1cc1d0c2b69da2796c3d5906'
+let apiPrivateKey = '99082f538e901ab37e9830648166088bf93af8d4'
+let ts = Date.now().toString()
+let hash = getHash(ts, apiPrivateKey, apiKey)
+
+let requestUrl = `${herUrl}?ts=${ts}&apiKey=${apiKey}&hash=${hash}`
+
+// const fetchHeroes =  (value) => {
+   
+
+//     try {
+//         let response = await fetch(url)
+//         let data = await response.json()
+//         return data
+//     } catch (err) {
+//         console.error(err)
+//         return
+//     }
+// }
+
+
+
 
 
 //node getters
@@ -17,15 +53,15 @@ const divSubjectInput = () => document.getElementById('subject-input')
 const divMessageInput = () => document.getElementById('message-input')
 
 //functions
-function insertAfter(newNode, existingNode) {
-    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
-}
+
+// http://gateway.marvel.com/v1/public/comics?ts=1&apikey=1234&hash=ffd275c5130566a2916217b101f26150
 
 const fetchHeroes = () =>
-    fetch(baseUrl + "/heroes")
+    fetch(requestUrl)
     .then(resp => resp.json())
     .then(data => {
         heroes = data
+        console.log(heroes)
     })
 
 const renderForm = () => {
