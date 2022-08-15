@@ -1,5 +1,6 @@
 // This is for our javascript logic
 let heroes = []
+let searchValue
 
 const baseUrl = 'https://gateway.marvel.com'
 let heroUrl = `${baseUrl}/v1/public/characters`
@@ -12,8 +13,8 @@ let apiKey = '51cb29fb1cc1d0c2b69da2796c3d5906'
 let apiPrivateKey = '99082f538e901ab37e9830648166088bf93af8d4'
 let ts = Date.now().toString()
 let hash = getHash(ts, apiPrivateKey, apiKey)
-
 let requestUrl = `${heroUrl}?ts=${ts}&apikey=${apiKey}&hash=${hash}`
+
 
 //node getters
 const formLink = () => document.getElementById('findHero')
@@ -27,13 +28,34 @@ const divFirstNameInput = () => document.getElementById('first-name-input')
 const divLastNameInput = () => document.getElementById('last-name-input')
 const divSubjectInput = () => document.getElementById('subject-input')
 const divMessageInput = () => document.getElementById('message-input')
+const divNameInput = () => document.getElementById('name-input')
+const browseHeroForm = () => document.getElementById('browse-form')
+const browseResultsRow = () => document.getElementById('browse-results-row')
+
+
+//functions
+const resetBrowse = () => {
+    browseResultsRow().innerHTML = ''
+}
+
+const resetMain = () => {
+    mainDiv().innerHTML = ''
+}
+const requestUrlSearchByName = (searchValue) => `${heroUrl}?ts=${ts}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${searchValue}`
 
 const fetchHeroes = () =>
     fetch(requestUrl)
     .then(resp => resp.json())
     .then(data => {
         heroes = data
-        console.log(heroes)
+    })
+
+const browseHeroesByName = () =>
+    fetch(requestUrlSearchByName(searchValue))
+    .then(resp => resp.json())
+    .then(data => {
+        heroes = data
+        renderHeroes(heroes)
     })
 
 const renderForm = () => {
@@ -43,7 +65,7 @@ const renderForm = () => {
 
 const renderHero = (hero) => {
     const col = document.createElement('div')
-    col.className = 'col s12 m4 l3'
+    col.className = 'col s12 m4 l4'
     
     col.appendChild(createCard(hero))
 
@@ -53,10 +75,9 @@ const renderHero = (hero) => {
 const renderHeroes = () => {
     const row = document.createElement('row')
     row.className = 'row'
-    
+    row.id = 'browse-results-row'
     heroes.data.results.forEach(hero => {
         const col = renderHero(hero)
-
         row.appendChild(col)
     })
     
@@ -66,7 +87,6 @@ const renderHeroes = () => {
 const renderMessages = () => {
 
 }
-
 
 //event handlers
 const renderFormPage = (e) => {
@@ -79,21 +99,27 @@ const renderFormPage = (e) => {
 
     mainDiv().appendChild(h3)
     renderForm()
-
-
-
 }
 
 const renderBrowsePage = (e) => {
     e.preventDefault()
-
     resetMain()
+
     const h3 = document.createElement('h3')
     h3.innerText = 'Browse Available Heroes'
 
     mainDiv().appendChild(h3)
+    createBrowseForm()
+    nameStartsWithEvent()
+    renderHeroes(heroes)
 
-    renderHeroes()
+}
+
+const searchHeroes = (e) => {
+    e.preventDefault()
+    searchValue = document.getElementById('name').value
+    browseHeroesByName(searchValue)
+    resetBrowse()
 
 }
 
@@ -131,16 +157,16 @@ const attachFormEvent = () => {
     formLink().addEventListener('click', renderFormPage)
 }
 
-const resetMain = () => {
-    mainDiv().innerHTML = ''
-}
-
 const renderHomeEvent = () => {
     homeLink().addEventListener('click', renderHomePage)
 }
 
 const browseHeroEvent = () => {
     browseLink().addEventListener('click', renderBrowsePage)
+}
+
+const nameStartsWithEvent = () => {
+    browseHeroForm().addEventListener('submit', searchHeroes)
 }
 
 const messageHeroEvent = () => {
@@ -183,10 +209,12 @@ const createCard = (hero) => {
 
     linkOne.setAttribute('href','')
     img.setAttribute('src', imgUrl)
+    img.setAttribute('class','crop-image')
+    span.setAttribute('style', 'color:white; font-weight: bold; font-size: 20px; background-color: black')
 
     span.innerText = hero.name
     pDescription.innerText = hero.description
-    linkOne.innerText = 'more'
+    linkOne.innerText = 'like'
     
     divImage.appendChild(img)
     divImage.appendChild(span)
@@ -214,14 +242,53 @@ const createHomePage = () => {
     mainDiv().appendChild(p3)
 }
 
+//browse form
+const createBrowseForm = () => {
+    const browseForm = document.createElement('form')
+    const search = document.createElement('button')
+    const divNameRow = document.createElement('div')
+    const divSubmitRow = document.createElement('div')
+    const divNameInputField = document.createElement('div')
+    const inputName = document.createElement('input')
+    const labelName = document.createElement('label')
 
+    browseForm.className = 'col s12'
+    browseForm.id = 'browse-form'
+    divNameRow.id = 'name-row'
+    divNameRow.className = 'row'
+    divNameInputField.className = 'input-field col s6'
+    divNameInputField.id = 'name-input'
+    inputName.id = 'name'
+    inputName.type = 'text'
+    inputName.class = 'validate'
+    labelName.for = 'name'
+
+    divSubmitRow.id = 'submit-row'
+    divSubmitRow.className = 'row'
+    divSubmitRow.style = 'padding: 0px'
+    search.type = 'submit'
+    search.name = 'action'
+    search.className = "btn waves-effect waves-light"
+    search.id = 'search'
+
+    labelName.innerText = 'Search Heroes by Name'
+    search.innerHTML = 'Search <i class="material-icons right">send</i>'
+
+    mainDiv().appendChild(browseForm)
+    browseHeroForm().appendChild(divNameRow).appendChild(divNameInputField).appendChild(inputName)
+    divNameInput().appendChild(labelName)
+    divNameInput().appendChild(search)
+    
+}
+
+
+//message form
 const createMessageForm = () => {
     const messageForm = document.createElement('form')
     const send = document.createElement('button')
     const divNameRow = document.createElement('div')
     const divSubjRow = document.createElement('div')
     const divMessageRow = document.createElement('div')
-    const divSubmitRow = document.createElement('div')
     const divFirstInputField = document.createElement('div')
     const divLastInputField = document.createElement('div')
     const inputFirstName = document.createElement('input')
