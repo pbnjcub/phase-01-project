@@ -35,7 +35,7 @@ const browseResultsRow = () => document.getElementById('browse-results-row')
 
 //functions
 const resetBrowse = () => {
-    browseResultsRow().innerHTML = ''
+    browseResultsRow().remove()
 }
 
 const resetMain = () => {
@@ -55,6 +55,7 @@ const browseHeroesByName = () =>
     .then(resp => resp.json())
     .then(data => {
         heroes = data
+        resetBrowse()
         renderHeroes(heroes)
     })
 
@@ -119,8 +120,6 @@ const searchHeroes = (e) => {
     e.preventDefault()
     searchValue = document.getElementById('name').value
     browseHeroesByName(searchValue)
-    resetBrowse()
-
 }
 
 const renderMessagePage = (e) => {
@@ -207,6 +206,7 @@ const createCard = (hero) => {
     divCardContent.className = 'card-content'
     divCardAction.className = 'card-action'
 
+    divCardContent.setAttribute('style', 'font-size: 12px')
     linkOne.setAttribute('href','')
     img.setAttribute('src', imgUrl)
     img.setAttribute('class','crop-image')
