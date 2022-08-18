@@ -1,6 +1,7 @@
 // This is for our javascript logic
 let heroes = []
 let searchValue
+let totLikes = 0
 
 const baseUrl = 'https://gateway.marvel.com'
 let heroUrl = `${baseUrl}/v1/public/characters`
@@ -17,7 +18,6 @@ let requestUrl = `${heroUrl}?ts=${ts}&apikey=${apiKey}&hash=${hash}`
 
 
 //node getters
-const formLink = () => document.getElementById('findHero')
 const mainDiv = () => document.getElementById('main')
 const browseLink = () => document.getElementById('browseHero')
 const homeLink = () => document.getElementById('home')
@@ -31,6 +31,9 @@ const divMessageInput = () => document.getElementById('message-input')
 const divNameInput = () => document.getElementById('name-input')
 const browseHeroForm = () => document.getElementById('browse-form')
 const browseResultsRow = () => document.getElementById('browse-results-row')
+const messageHeroForm = () => document.getElementById('message-form')
+const likeBtns = () => document.querySelectorAll('a.like-btns')
+const numLikes = () => document.querySelectorAll('num-like')
 
 
 //functions
@@ -59,10 +62,7 @@ const browseHeroesByName = () =>
         renderHeroes(heroes)
     })
 
-const renderForm = () => {
-    // create a form
 
-}
 
 const renderHero = (hero) => {
     const col = document.createElement('div')
@@ -88,18 +88,14 @@ const renderHeroes = () => {
 const renderMessages = () => {
 
 }
+    
 
 //event handlers
-const renderFormPage = (e) => {
+
+const addLikes = (e) => {
     e.preventDefault()
-
-    resetMain()
-
-    const h3 = document.createElement('h3')
-    h3.innerText = 'Find Your Hero'
-
-    mainDiv().appendChild(h3)
-    renderForm()
+    totLikes = totLikes + 1
+    console.log(totLikes)
 }
 
 const renderBrowsePage = (e) => {
@@ -113,7 +109,7 @@ const renderBrowsePage = (e) => {
     createBrowseForm()
     nameStartsWithEvent()
     renderHeroes(heroes)
-
+    likeBtnEvent()
 }
 
 const searchHeroes = (e) => {
@@ -133,8 +129,6 @@ const renderMessagePage = (e) => {
 
     createMessageForm()
 
-    renderMessages()
-
 }
 
 const renderHomePage = (e) => {
@@ -152,9 +146,11 @@ const renderHomePage = (e) => {
 }
 
 //event listeners
-const attachFormEvent = () => {
-    formLink().addEventListener('click', renderFormPage)
-}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems, heroes);
+  });
 
 const renderHomeEvent = () => {
     homeLink().addEventListener('click', renderHomePage)
@@ -176,9 +172,14 @@ const hideMessageCount = () => {
     messageCount().style.display = 'none'
 }
 
+const likeBtnEvent = () => {
+    likeBtns().forEach(btn => {
+        btn.addEventListener('click', addLikes)
+    })
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchHeroes()
-    attachFormEvent()
     renderHomeEvent()
     browseHeroEvent()
     hideMessageCount()
@@ -196,6 +197,7 @@ const createCard = (hero) => {
     const divCardAction = document.createElement('div')
     const linkOne = document.createElement('a')
     const img = document.createElement('img')
+    const spanLikes = document.createElement('span')
     let imgPath = hero.thumbnail.path
     let imgExtension = hero.thumbnail.extension
     let imgUrl = `${imgPath}.${imgExtension}`
@@ -205,21 +207,28 @@ const createCard = (hero) => {
     span.className = 'card-title'
     divCardContent.className = 'card-content'
     divCardAction.className = 'card-action'
+    linkOne.id = 'like-button'
+    linkOne.className = 'like-btns'
+    spanLikes.className = 'num-like'
 
-    divCardContent.setAttribute('style', 'font-size: 12px')
-    linkOne.setAttribute('href','')
+    divCardContent.setAttribute('style', 'font-size: 10px')
+    linkOne.setAttribute('href',' ')
+    linkOne.setAttribute('style','color:black; font-weight:bold')
     img.setAttribute('src', imgUrl)
     img.setAttribute('class','crop-image')
     span.setAttribute('style', 'color:white; font-weight: bold; font-size: 20px; background-color: black')
+    spanLikes.setAttribute('style', 'color:black; font-weight: bold')
 
     span.innerText = hero.name
     pDescription.innerText = hero.description
-    linkOne.innerText = 'like'
+    linkOne.innerText = "like"
+    spanLikes.innerText = `${totLikes}`
     
     divImage.appendChild(img)
     divImage.appendChild(span)
     divCardContent.appendChild(pDescription)
     divCardAction.appendChild(linkOne)
+    divCardAction.appendChild(spanLikes)
 
     divCard.appendChild(divImage)
     divCard.appendChild(divCardContent)
@@ -247,7 +256,6 @@ const createBrowseForm = () => {
     const browseForm = document.createElement('form')
     const search = document.createElement('button')
     const divNameRow = document.createElement('div')
-    const divSubmitRow = document.createElement('div')
     const divNameInputField = document.createElement('div')
     const inputName = document.createElement('input')
     const labelName = document.createElement('label')
@@ -263,9 +271,7 @@ const createBrowseForm = () => {
     inputName.class = 'validate'
     labelName.for = 'name'
 
-    divSubmitRow.id = 'submit-row'
-    divSubmitRow.className = 'row'
-    divSubmitRow.style = 'padding: 0px'
+
     search.type = 'submit'
     search.name = 'action'
     search.className = "btn waves-effect waves-light"
@@ -285,6 +291,9 @@ const createBrowseForm = () => {
 //message form
 const createMessageForm = () => {
     const messageForm = document.createElement('form')
+    const divHeroSelect = document.createElement('div')
+    const selectHeroSelect = document.createElement('select')
+    const optionHeroSelect = document.createElement('option')
     const send = document.createElement('button')
     const divNameRow = document.createElement('div')
     const divSubjRow = document.createElement('div')
@@ -305,6 +314,8 @@ const createMessageForm = () => {
     messageForm.className = 'col s12'
     messageForm.id = 'message-form'
     
+    divHeroSelect.className = 'input-field col s12'
+    optionHeroSelect.value = " "
     divNameRow.id = 'name-row'
     divNameRow.className = 'row'
     divFirstInputField.className = 'input-field col s6'
@@ -337,25 +348,29 @@ const createMessageForm = () => {
     textAreaMessage.class = 'materialize-textarea'
     labelMessage.for = 'subject'
 
-    divSubmitRow.id = 'submit-row'
-    divSubmitRow.className = 'row'
-    send.type = 'button'
-    send.value = 'Send'
+    send.type = 'submit'
+    send.name = 'action'
+    send.className = "btn waves-effect waves-light"
+    send.id = 'send'
 
+    send.innerHTML = 'Message <i class="material-icons right">send</i>'
+
+    optionHeroSelect.innerText = 'Choose Your Hero'
     labelFirstName.innerText = 'First Name'
     labelLastName.innerText = 'Last Name'
     labelSubj.innerText = 'Subject'
     labelMessage.innerText = 'Message'
     
     mainDiv().appendChild(messageForm)
-    mainDiv().appendChild(divNameRow).appendChild(divFirstInputField).appendChild(inputFirstName)
+    messageHeroForm().appendChild(divHeroSelect).appendChild(selectHeroSelect).appendChild(optionHeroSelect)
+    messageHeroForm().appendChild(divNameRow).appendChild(divFirstInputField).appendChild(inputFirstName)
     divFirstNameInput().appendChild(labelFirstName)
-    mainDiv().appendChild(divNameRow).appendChild(divLastInputField).appendChild(inputLastName)
+    messageHeroForm().appendChild(divNameRow).appendChild(divLastInputField).appendChild(inputLastName)
     divLastNameInput().appendChild(labelLastName)
-    mainDiv().appendChild(divSubjRow).appendChild(divSubjInputField).appendChild(inputSubj)
+    messageHeroForm().appendChild(divSubjRow).appendChild(divSubjInputField).appendChild(inputSubj)
     divSubjectInput().appendChild(labelSubj)
-    mainDiv().appendChild(divMessageRow).appendChild(divMessageInputField).appendChild(textAreaMessage)
+    messageHeroForm().appendChild(divMessageRow).appendChild(divMessageInputField).appendChild(textAreaMessage)
     divMessageInput().appendChild(labelMessage)
-    mainDiv().appendChild(divSubmitRow).appendChild(send)
+    messageHeroForm().appendChild(send)
 
 }
