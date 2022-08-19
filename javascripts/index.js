@@ -63,6 +63,7 @@ const browseHeroesByName = () =>
         heroes = data
         resetBrowse()
         renderHeroes(heroes)
+        likeBtnEvent()
     })
 
 
