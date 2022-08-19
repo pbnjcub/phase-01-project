@@ -2,6 +2,7 @@
 let heroes = []
 let searchValue
 let like = 0
+let countMess = 0
 
 const baseUrl = 'https://gateway.marvel.com'
 let heroUrl = `${baseUrl}/v1/public/characters`
@@ -32,8 +33,10 @@ const divNameInput = () => document.getElementById('name-input')
 const browseHeroForm = () => document.getElementById('browse-form')
 const browseResultsRow = () => document.getElementById('browse-results-row')
 const messageHeroForm = () => document.getElementById('message-form')
+const count = () => document.getElementById('count')
+const sendButton = () => document.getElementById('send')
 const likeBtns = () => document.querySelectorAll('.like-btns')
-const heartIcon = () => document.querySelectorAll('i.material-icons')
+const heartIcon = () => document.querySelectorAll('i#like-heart')
 
 
 //functions
@@ -85,12 +88,20 @@ const renderHeroes = () => {
     mainDiv().appendChild(row)
 }
 
-const renderMessages = () => {
 
+const hideMessageCount = () => {
+    messageCount().style.display = 'none'
 }
-    
 
 //event handlers
+
+const countMessage = (e) => {
+    e.preventDefault()
+    console.log('hello')
+    messageCount().style.display = 'block'
+    countMess = countMess + 1
+    count().innerText = countMess
+}
 
 const changeHeart = (e) => {
     e.preventDefault()
@@ -134,6 +145,7 @@ const renderMessagePage = (e) => {
     mainDiv().appendChild(h3)
 
     createMessageForm()
+    sendMessageEvent()
 
 }
 
@@ -153,11 +165,6 @@ const renderHomePage = (e) => {
 
 //event listeners
 
-document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('select');
-    var instances = M.FormSelect.init(elems, heroes);
-  });
-
 const renderHomeEvent = () => {
     homeLink().addEventListener('click', renderHomePage)
 }
@@ -174,8 +181,8 @@ const messageHeroEvent = () => {
     messageHero().addEventListener('click', renderMessagePage)
 }
 
-const hideMessageCount = () => {
-    messageCount().style.display = 'none'
+const sendMessageEvent = () => {
+    messageHeroForm().addEventListener('submit', countMessage)
 }
 
 const likeBtnEvent = () => {
@@ -218,6 +225,7 @@ const createCard = (hero) => {
     linkOne.className = 'like-btns'
     spanLikes.className = 'like-icon'
     iconHeart.className = 'material-icons'
+    iconHeart.id = 'like-heart'
 
     divCardContent.setAttribute('style', 'font-size: 10px')
     linkOne.setAttribute('style','color:black; font-weight:bold')
@@ -250,8 +258,8 @@ const createHomePage = () => {
     const p3 = document.createElement('p')
 
     p1.innerText = 'If you are interested in getting to know heroes who have similar interests and powers to your own, this is the place to be.'
-    p2.innerText = 'Click on the "Find Your Hero" link to take the "Personality Quiz" to narrow your search.' 
-    p3.innerText = 'Or you can browse through all our heroes using the "Browse Heroes" tool.'
+    p2.innerText = 'Click on the "Browse Heroes" link to browse by name.' 
+    p3.innerText = 'You can let a hero know if you are interested in getting to know them using the like button below their photo and description.'
 
     mainDiv().appendChild(p1)
     mainDiv().appendChild(p2)
