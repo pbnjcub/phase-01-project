@@ -98,10 +98,10 @@ const hideMessageCount = () => {
 
 const countMessage = (e) => {
     e.preventDefault()
-    console.log('hello')
     messageCount().style.display = 'block'
     countMess = countMess + 1
     count().innerText = countMess
+    messageHeroForm().reset()
 }
 
 const changeHeart = (e) => {
