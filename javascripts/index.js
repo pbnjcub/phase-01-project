@@ -37,6 +37,8 @@ const count = () => document.getElementById('count')
 const sendButton = () => document.getElementById('send')
 const likeBtns = () => document.querySelectorAll('.like-btns')
 const heartIcon = () => document.querySelectorAll('i#like-heart')
+const selectHero = () => document.getElementById('select-hero')
+const optionSelectedDisabled = () => document.getElementById('select-disabled')
 
 
 //functions
@@ -146,7 +148,9 @@ const renderMessagePage = (e) => {
     mainDiv().appendChild(h3)
 
     createMessageForm()
+    optionSelectedDisabled.disabled
     sendMessageEvent()
+    selectHeroEvent()
 
 }
 
@@ -165,6 +169,10 @@ const renderHomePage = (e) => {
 }
 
 //event listeners
+const selectHeroEvent = () => {
+    const sel = document.querySelectorAll('select')
+    M.FormSelect.init(sel)
+} 
 
 const renderHomeEvent = () => {
     homeLink().addEventListener('click', renderHomePage)
@@ -201,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 //helpers
-
+//hero card
 const createCard = (hero) => {
     const divCard = document.createElement('div')
     const divImage = document.createElement('div')
@@ -209,7 +217,6 @@ const createCard = (hero) => {
     const divCardContent = document.createElement('div')
     const pDescription = document.createElement('p')
     const divCardAction = document.createElement('div')
-    const linkOne = document.createElement('p')
     const img = document.createElement('img')
     const spanLikes = document.createElement('span')
     const iconHeart = document.createElement('i')
@@ -222,14 +229,11 @@ const createCard = (hero) => {
     span.className = 'card-title'
     divCardContent.className = 'card-content'
     divCardAction.className = 'card-action'
-    linkOne.id = 'like-button'
-    linkOne.className = 'like-btns'
     spanLikes.className = 'like-icon'
     iconHeart.className = 'material-icons'
     iconHeart.id = 'like-heart'
 
     divCardContent.setAttribute('style', 'font-size: 12px')
-    linkOne.setAttribute('style','color:black; font-weight:bold')
     img.setAttribute('src', imgUrl)
     img.setAttribute('class','crop-image')
     span.setAttribute('style', 'color:white; font-weight: bold; font-size: 12px; background-color: black')
@@ -237,13 +241,11 @@ const createCard = (hero) => {
 
     span.innerText = hero.name
     pDescription.innerText = hero.description
-    linkOne.innerText = "like"
     iconHeart.innerText = 'favorite_border'
     
     divImage.appendChild(img)
     divImage.appendChild(span)
     divCardContent.appendChild(pDescription)
-    // divCardAction.appendChild(linkOne)
     divCardAction.appendChild(spanLikes).appendChild(iconHeart)
 
     divCard.appendChild(divImage)
@@ -303,13 +305,13 @@ const createBrowseForm = () => {
     
 }
 
-
 //message form
 const createMessageForm = () => {
     const messageForm = document.createElement('form')
-    const divHeroSelect = document.createElement('div')
-    const selectHeroSelect = document.createElement('select')
-    const optionHeroSelect = document.createElement('option')
+    const divChooseHero = document.createElement('div')
+    const selectChooseHero = document.createElement('select')
+    const optionChooseHero = document.createElement('option')
+    const optionSelectedDisabled = document.createElement('option')
     const send = document.createElement('button')
     const divNameRow = document.createElement('div')
     const divSubjRow = document.createElement('div')
@@ -330,8 +332,14 @@ const createMessageForm = () => {
     messageForm.className = 'col s12'
     messageForm.id = 'message-form'
     
-    divHeroSelect.className = 'input-field col s12'
-    optionHeroSelect.value = " "
+    divChooseHero.className = 'input-field col s6'
+    optionChooseHero.value = "1"
+    optionSelectedDisabled.value = " "
+    optionSelectedDisabled.id = 'select-disabled'
+    optionSelectedDisabled.setAttribute('' ,'disabled selected')
+    selectChooseHero.id = 'select-hero'
+
+
     divNameRow.id = 'name-row'
     divNameRow.className = 'row'
     divFirstInputField.className = 'input-field col s6'
@@ -371,14 +379,16 @@ const createMessageForm = () => {
 
     send.innerHTML = 'Message <i class="material-icons right">send</i>'
 
-    optionHeroSelect.innerText = 'Choose Your Hero'
+    optionSelectedDisabled.innerText = 'Choose Your Hero'
+    optionChooseHero.innerText = 'spiderman'
     labelFirstName.innerText = 'First Name'
     labelLastName.innerText = 'Last Name'
     labelSubj.innerText = 'Subject'
     labelMessage.innerText = 'Message'
     
     mainDiv().appendChild(messageForm)
-    messageHeroForm().appendChild(divHeroSelect).appendChild(selectHeroSelect).appendChild(optionHeroSelect)
+    messageHeroForm().appendChild(divChooseHero).appendChild(selectChooseHero).appendChild(optionSelectedDisabled)
+    selectHero().appendChild(optionChooseHero)
     messageHeroForm().appendChild(divNameRow).appendChild(divFirstInputField).appendChild(inputFirstName)
     divFirstNameInput().appendChild(labelFirstName)
     messageHeroForm().appendChild(divNameRow).appendChild(divLastInputField).appendChild(inputLastName)
