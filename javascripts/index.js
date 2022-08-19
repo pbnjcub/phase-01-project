@@ -228,7 +228,7 @@ const createCard = (hero) => {
     iconHeart.className = 'material-icons'
     iconHeart.id = 'like-heart'
 
-    divCardContent.setAttribute('style', 'font-size: 10px')
+    divCardContent.setAttribute('style', 'font-size: 12px')
     linkOne.setAttribute('style','color:black; font-weight:bold')
     img.setAttribute('src', imgUrl)
     img.setAttribute('class','crop-image')
