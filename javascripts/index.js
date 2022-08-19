@@ -3,6 +3,7 @@ let heroes = []
 let searchValue
 let like = 0
 let countMess = 0
+let heroNames = []
 
 const baseUrl = 'https://gateway.marvel.com'
 let heroUrl = `${baseUrl}/v1/public/characters`
@@ -42,6 +43,8 @@ const optionSelectedDisabled = () => document.getElementById('select-disabled')
 
 
 //functions
+
+
 const resetBrowse = () => {
     browseResultsRow().remove()
 }
@@ -56,6 +59,7 @@ const fetchHeroes = () =>
     .then(resp => resp.json())
     .then(data => {
         heroes = data
+        heroNameArray(heroes)
     })
 
 const browseHeroesByName = () =>
@@ -66,8 +70,26 @@ const browseHeroesByName = () =>
         resetBrowse()
         renderHeroes(heroes)
         likeBtnEvent()
+        heroNameArray(heroes)
     })
 
+const heroNameArray = (heroes) => {
+    let heroesData = heroes.data.results
+    for(let i = 0; i<heroesData.length; i++) {
+        heroNames.push(heroesData[i].name)
+    }
+        return heroNames
+    }
+
+const createOptionHero = (heroNames) => {
+    for(let j = 0; j<heroNames.length; j++) {
+        const option = document.createElement('option')
+        option.value ='1'
+        option.innerText = heroNames[j]
+        console.log(option)
+    }
+}
+    
 
 
 const renderHero = (hero) => {
@@ -149,8 +171,10 @@ const renderMessagePage = (e) => {
 
     createMessageForm()
     optionSelectedDisabled.disabled
+    heroNameArray()
     sendMessageEvent()
     selectHeroEvent()
+
 
 }
 
@@ -206,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     browseHeroEvent()
     hideMessageCount()
     messageHeroEvent()
+
 })
 
 //helpers
@@ -336,7 +361,6 @@ const createMessageForm = () => {
     optionChooseHero.value = "1"
     optionSelectedDisabled.value = " "
     optionSelectedDisabled.id = 'select-disabled'
-    optionSelectedDisabled.setAttribute('' ,'disabled selected')
     selectChooseHero.id = 'select-hero'
 
 
@@ -380,7 +404,6 @@ const createMessageForm = () => {
     send.innerHTML = 'Message <i class="material-icons right">send</i>'
 
     optionSelectedDisabled.innerText = 'Choose Your Hero'
-    optionChooseHero.innerText = 'spiderman'
     labelFirstName.innerText = 'First Name'
     labelLastName.innerText = 'Last Name'
     labelSubj.innerText = 'Subject'
@@ -388,7 +411,7 @@ const createMessageForm = () => {
     
     mainDiv().appendChild(messageForm)
     messageHeroForm().appendChild(divChooseHero).appendChild(selectChooseHero).appendChild(optionSelectedDisabled)
-    selectHero().appendChild(optionChooseHero)
+    createOptionHero(heroNames)
     messageHeroForm().appendChild(divNameRow).appendChild(divFirstInputField).appendChild(inputFirstName)
     divFirstNameInput().appendChild(labelFirstName)
     messageHeroForm().appendChild(divNameRow).appendChild(divLastInputField).appendChild(inputLastName)
