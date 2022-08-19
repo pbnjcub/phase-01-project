@@ -232,7 +232,7 @@ const createCard = (hero) => {
     linkOne.setAttribute('style','color:black; font-weight:bold')
     img.setAttribute('src', imgUrl)
     img.setAttribute('class','crop-image')
-    span.setAttribute('style', 'color:white; font-weight: bold; font-size: 20px; background-color: black')
+    span.setAttribute('style', 'color:white; font-weight: bold; font-size: 12px; background-color: black')
     spanLikes.setAttribute('style', 'color:black; font-weight: bold')
 
     span.innerText = hero.name
