@@ -1,7 +1,7 @@
 // This is for our javascript logic
 let heroes = []
 let searchValue
-let totLikes = 0
+let like = 0
 
 const baseUrl = 'https://gateway.marvel.com'
 let heroUrl = `${baseUrl}/v1/public/characters`
@@ -32,8 +32,8 @@ const divNameInput = () => document.getElementById('name-input')
 const browseHeroForm = () => document.getElementById('browse-form')
 const browseResultsRow = () => document.getElementById('browse-results-row')
 const messageHeroForm = () => document.getElementById('message-form')
-const likeBtns = () => document.querySelectorAll('a.like-btns')
-const numLikes = () => document.querySelectorAll('num-like')
+const likeBtns = () => document.querySelectorAll('.like-btns')
+const heartIcon = () => document.querySelectorAll('i.material-icons')
 
 
 //functions
@@ -92,10 +92,16 @@ const renderMessages = () => {
 
 //event handlers
 
-const addLikes = (e) => {
+const changeHeart = (e) => {
     e.preventDefault()
-    totLikes = totLikes + 1
-    console.log(totLikes)
+    if (like === 0) {
+        e.target.innerText = 'favorite'
+        like = 1
+    } else {
+        e.target.innerText = 'favorite_border'
+        like = 0
+    }
+
 }
 
 const renderBrowsePage = (e) => {
@@ -173,8 +179,8 @@ const hideMessageCount = () => {
 }
 
 const likeBtnEvent = () => {
-    likeBtns().forEach(btn => {
-        btn.addEventListener('click', addLikes)
+    heartIcon().forEach(heart => {
+        heart.addEventListener('click', changeHeart)
     })
 }
 
@@ -195,9 +201,10 @@ const createCard = (hero) => {
     const divCardContent = document.createElement('div')
     const pDescription = document.createElement('p')
     const divCardAction = document.createElement('div')
-    const linkOne = document.createElement('a')
+    const linkOne = document.createElement('p')
     const img = document.createElement('img')
     const spanLikes = document.createElement('span')
+    const iconHeart = document.createElement('i')
     let imgPath = hero.thumbnail.path
     let imgExtension = hero.thumbnail.extension
     let imgUrl = `${imgPath}.${imgExtension}`
@@ -209,10 +216,10 @@ const createCard = (hero) => {
     divCardAction.className = 'card-action'
     linkOne.id = 'like-button'
     linkOne.className = 'like-btns'
-    spanLikes.className = 'num-like'
+    spanLikes.className = 'like-icon'
+    iconHeart.className = 'material-icons'
 
     divCardContent.setAttribute('style', 'font-size: 10px')
-    linkOne.setAttribute('href',' ')
     linkOne.setAttribute('style','color:black; font-weight:bold')
     img.setAttribute('src', imgUrl)
     img.setAttribute('class','crop-image')
@@ -222,13 +229,13 @@ const createCard = (hero) => {
     span.innerText = hero.name
     pDescription.innerText = hero.description
     linkOne.innerText = "like"
-    spanLikes.innerText = `${totLikes}`
+    iconHeart.innerText = 'favorite_border'
     
     divImage.appendChild(img)
     divImage.appendChild(span)
     divCardContent.appendChild(pDescription)
-    divCardAction.appendChild(linkOne)
-    divCardAction.appendChild(spanLikes)
+    // divCardAction.appendChild(linkOne)
+    divCardAction.appendChild(spanLikes).appendChild(iconHeart)
 
     divCard.appendChild(divImage)
     divCard.appendChild(divCardContent)
