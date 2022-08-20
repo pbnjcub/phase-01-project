@@ -22,6 +22,7 @@ let requestUrl = `${heroUrl}?ts=${ts}&apikey=${apiKey}&hash=${hash}`
 
 //node getters
 const mainDiv = () => document.getElementById('main')
+const messagesDiv = () => document.getElementById('messages')
 const browseLink = () => document.getElementById('browseHero')
 const homeLink = () => document.getElementById('home')
 const messageCount = () => document.getElementById('message-count')
@@ -41,18 +42,13 @@ const likeBtns = () => document.querySelectorAll('.like-btns')
 const heartIcon = () => document.querySelectorAll('i#like-heart')
 const selectHero = () => document.getElementById('select-hero')
 const optionSelectedDisabled = () => document.getElementById('select-disabled')
-const allOptions = () => document.getElementsByTagName('option')
+const allOptions = () => document.querySelectorAll('ul.dropdown-content li')
 const subjInput = () => document.getElementById('subject')
 const messageInput = () => document.getElementById('textarea1')
 
 
 
 //functions
-// const selectHeroEvent = () => {
-//     const sel = document.querySelectorAll('select')
-//     M.FormSelect.init(sel)
-// } 
-
 const resetBrowse = () => {
     browseResultsRow().remove()
 }
@@ -62,8 +58,10 @@ const resetMain = () => {
 }
 
 const resetOptionHero = () => {
-    selectHero().remove()
+    for(let option of allOptions()) {
+        option.remove()
     }
+}
 
 const requestUrlSearchByName = (searchValue) => `${heroUrl}?ts=${ts}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${searchValue}`
 
@@ -72,7 +70,6 @@ const fetchHeroes = () =>
     .then(resp => resp.json())
     .then(data => {
         heroes = data
-        // heroNameArray(heroes)
     })
 
 const browseHeroesByName = () =>
@@ -83,7 +80,6 @@ const browseHeroesByName = () =>
         resetBrowse()
         renderHeroes(heroes)
         likeBtnEvent()
-        // heroNameArray(heroes)
     })
 
 const heroNameArray = () => {
@@ -164,7 +160,7 @@ const recordMessage = (e) => {
 
     messageLi.innerText = messageLog
 
-    mainDiv().appendChild(messageDiv).appendChild(messageUl).appendChild(messageLi)
+    messagesDiv().appendChild(messageDiv).appendChild(messageUl).appendChild(messageLi)
     messageHeroForm().reset()
 }
 
@@ -206,17 +202,15 @@ const renderMessagePage = (e) => {
 
     resetMain()
     const h3 = document.createElement('h3')
-    const messageH4 = document.createElement('h4')
+
     h3.innerText = 'Message A Hero'
-    messageH4.innerText = 'Messages'
+    
 
     mainDiv().appendChild(h3)
     heroNameArray(heroes)
     createMessageForm()
     sendMessageEvent()
     recordMessageEvent()
-    
-    mainDiv().appendChild(messageH4)
 }
 
 const renderHomePage = (e) => {
