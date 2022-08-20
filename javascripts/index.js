@@ -4,6 +4,7 @@ let searchValue
 let like = 0
 let countMess = 0
 let heroNames = []
+let optionNames = []
 
 const baseUrl = 'https://gateway.marvel.com'
 let heroUrl = `${baseUrl}/v1/public/characters`
@@ -40,10 +41,16 @@ const likeBtns = () => document.querySelectorAll('.like-btns')
 const heartIcon = () => document.querySelectorAll('i#like-heart')
 const selectHero = () => document.getElementById('select-hero')
 const optionSelectedDisabled = () => document.getElementById('select-disabled')
+const allOptions = () => document.getElementsByTagName('option')
+const subjInput = () => document.getElementById('subject')
+const messageInput = () => document.getElementById('textarea1')
 
 
 //functions
-
+const selectHeroEvent = () => {
+    const sel = document.querySelectorAll('select')
+    M.FormSelect.init(sel)
+} 
 
 const resetBrowse = () => {
     browseResultsRow().remove()
@@ -52,6 +59,14 @@ const resetBrowse = () => {
 const resetMain = () => {
     mainDiv().innerHTML = ''
 }
+
+// const resetOptionHero = () => {
+//     for(let option of allOptions) {
+//         option.remove()
+//     }
+// }
+
+
 const requestUrlSearchByName = (searchValue) => `${heroUrl}?ts=${ts}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${searchValue}`
 
 const fetchHeroes = () =>
@@ -73,7 +88,7 @@ const browseHeroesByName = () =>
         heroNameArray(heroes)
     })
 
-const heroNameArray = (heroes) => {
+const heroNameArray = () => {
     let heroesData = heroes.data.results
     for(let i = 0; i<heroesData.length; i++) {
         heroNames.push(heroesData[i].name)
@@ -81,16 +96,25 @@ const heroNameArray = (heroes) => {
         return heroNames
     }
 
-const createOptionHero = (heroNames) => {
+const createOptionHero = () => {
+
     for(let j = 0; j<heroNames.length; j++) {
         const option = document.createElement('option')
-        option.value ='1'
-        option.innerText = heroNames[j]
-        console.log(option)
+        if(j === 0) {
+            option.value = j
+            option.setAttribute('selected', 'selected')
+            option.innerText = heroNames[j]
+        } else {
+            option.value = j
+            option.innerText = heroNames[j]
+        }
+        optionNames.push(option)
+    }
+    let iterator = optionNames.values()
+    for(let name of iterator) {
+        selectHero().appendChild(name)
     }
 }
-    
-
 
 const renderHero = (hero) => {
     const col = document.createElement('div')
@@ -125,6 +149,23 @@ const countMessage = (e) => {
     messageCount().style.display = 'block'
     countMess = countMess + 1
     count().innerText = countMess
+
+}
+
+const recordMessage = (e) => {
+    e.preventDefault()
+    let selectedHero = selectHero().options[selectHero().selectedIndex].text
+    let messageSubject = subjInput().value
+    let messageText = messageInput().value
+
+    const messageDiv = document.createElement('div')
+    const messageUl = document.createElement('ul')
+    const messageLi = document.createElement('li')
+
+
+    messageLi.innerText = `To: ${selectedHero}   Subject: ${messageSubject}   Message: ${messageText}`
+
+    mainDiv().appendChild(messageDiv).appendChild(messageUl).appendChild(messageLi)
     messageHeroForm().reset()
 }
 
@@ -158,6 +199,7 @@ const searchHeroes = (e) => {
     e.preventDefault()
     searchValue = document.getElementById('name').value
     browseHeroesByName(searchValue)
+
 }
 
 const renderMessagePage = (e) => {
@@ -165,17 +207,19 @@ const renderMessagePage = (e) => {
 
     resetMain()
     const h3 = document.createElement('h3')
+    const messageH4 = document.createElement('h4')
     h3.innerText = 'Message A Hero'
+    messageH4.innerText = 'Messages'
 
     mainDiv().appendChild(h3)
 
     createMessageForm()
-    optionSelectedDisabled.disabled
     heroNameArray()
     sendMessageEvent()
+    recordMessageEvent()
     selectHeroEvent()
-
-
+    
+    mainDiv().appendChild(messageH4)
 }
 
 const renderHomePage = (e) => {
@@ -193,10 +237,6 @@ const renderHomePage = (e) => {
 }
 
 //event listeners
-const selectHeroEvent = () => {
-    const sel = document.querySelectorAll('select')
-    M.FormSelect.init(sel)
-} 
 
 const renderHomeEvent = () => {
     homeLink().addEventListener('click', renderHomePage)
@@ -216,6 +256,10 @@ const messageHeroEvent = () => {
 
 const sendMessageEvent = () => {
     messageHeroForm().addEventListener('submit', countMessage)
+}
+
+const recordMessageEvent = () => {
+    messageHeroForm().addEventListener('submit', recordMessage)
 }
 
 const likeBtnEvent = () => {
@@ -314,7 +358,6 @@ const createBrowseForm = () => {
     inputName.class = 'validate'
     labelName.for = 'name'
 
-
     search.type = 'submit'
     search.name = 'action'
     search.className = "btn waves-effect waves-light"
@@ -331,12 +374,11 @@ const createBrowseForm = () => {
 }
 
 //message form
-const createMessageForm = () => {
+const createMessageForm = (heroNames) => {
     const messageForm = document.createElement('form')
     const divChooseHero = document.createElement('div')
     const selectChooseHero = document.createElement('select')
     const optionChooseHero = document.createElement('option')
-    const optionSelectedDisabled = document.createElement('option')
     const send = document.createElement('button')
     const divNameRow = document.createElement('div')
     const divSubjRow = document.createElement('div')
@@ -359,8 +401,6 @@ const createMessageForm = () => {
     
     divChooseHero.className = 'input-field col s6'
     optionChooseHero.value = "1"
-    optionSelectedDisabled.value = " "
-    optionSelectedDisabled.id = 'select-disabled'
     selectChooseHero.id = 'select-hero'
 
 
@@ -403,14 +443,13 @@ const createMessageForm = () => {
 
     send.innerHTML = 'Message <i class="material-icons right">send</i>'
 
-    optionSelectedDisabled.innerText = 'Choose Your Hero'
     labelFirstName.innerText = 'First Name'
     labelLastName.innerText = 'Last Name'
     labelSubj.innerText = 'Subject'
     labelMessage.innerText = 'Message'
     
     mainDiv().appendChild(messageForm)
-    messageHeroForm().appendChild(divChooseHero).appendChild(selectChooseHero).appendChild(optionSelectedDisabled)
+    messageHeroForm().appendChild(divChooseHero).appendChild(selectChooseHero)
     createOptionHero(heroNames)
     messageHeroForm().appendChild(divNameRow).appendChild(divFirstInputField).appendChild(inputFirstName)
     divFirstNameInput().appendChild(labelFirstName)
