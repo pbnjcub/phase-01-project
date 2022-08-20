@@ -3,7 +3,7 @@ let heroes = []
 let searchValue
 let like = 0
 let countMess = 0
-let heroNames = []
+let heroNames
 let optionNames = []
 
 const baseUrl = 'https://gateway.marvel.com'
@@ -46,11 +46,12 @@ const subjInput = () => document.getElementById('subject')
 const messageInput = () => document.getElementById('textarea1')
 
 
+
 //functions
-const selectHeroEvent = () => {
-    const sel = document.querySelectorAll('select')
-    M.FormSelect.init(sel)
-} 
+// const selectHeroEvent = () => {
+//     const sel = document.querySelectorAll('select')
+//     M.FormSelect.init(sel)
+// } 
 
 const resetBrowse = () => {
     browseResultsRow().remove()
@@ -60,12 +61,9 @@ const resetMain = () => {
     mainDiv().innerHTML = ''
 }
 
-// const resetOptionHero = () => {
-//     for(let option of allOptions) {
-//         option.remove()
-//     }
-// }
-
+const resetOptionHero = () => {
+    selectHero().remove()
+    }
 
 const requestUrlSearchByName = (searchValue) => `${heroUrl}?ts=${ts}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${searchValue}`
 
@@ -74,7 +72,7 @@ const fetchHeroes = () =>
     .then(resp => resp.json())
     .then(data => {
         heroes = data
-        heroNameArray(heroes)
+        // heroNameArray(heroes)
     })
 
 const browseHeroesByName = () =>
@@ -85,10 +83,11 @@ const browseHeroesByName = () =>
         resetBrowse()
         renderHeroes(heroes)
         likeBtnEvent()
-        heroNameArray(heroes)
+        // heroNameArray(heroes)
     })
 
 const heroNameArray = () => {
+    heroNames = []
     let heroesData = heroes.data.results
     for(let i = 0; i<heroesData.length; i++) {
         heroNames.push(heroesData[i].name)
@@ -97,7 +96,6 @@ const heroNameArray = () => {
     }
 
 const createOptionHero = () => {
-
     for(let j = 0; j<heroNames.length; j++) {
         const option = document.createElement('option')
         if(j === 0) {
@@ -157,13 +155,14 @@ const recordMessage = (e) => {
     let selectedHero = selectHero().options[selectHero().selectedIndex].text
     let messageSubject = subjInput().value
     let messageText = messageInput().value
+    let messageLog = `TO: ${selectedHero}     SUBJECT: ${messageSubject}     MESSAGE: ${messageText}`
 
     const messageDiv = document.createElement('div')
     const messageUl = document.createElement('ul')
     const messageLi = document.createElement('li')
 
 
-    messageLi.innerText = `To: ${selectedHero}   Subject: ${messageSubject}   Message: ${messageText}`
+    messageLi.innerText = messageLog
 
     mainDiv().appendChild(messageDiv).appendChild(messageUl).appendChild(messageLi)
     messageHeroForm().reset()
@@ -212,12 +211,10 @@ const renderMessagePage = (e) => {
     messageH4.innerText = 'Messages'
 
     mainDiv().appendChild(h3)
-
+    heroNameArray(heroes)
     createMessageForm()
-    heroNameArray()
     sendMessageEvent()
     recordMessageEvent()
-    selectHeroEvent()
     
     mainDiv().appendChild(messageH4)
 }
@@ -237,7 +234,6 @@ const renderHomePage = (e) => {
 }
 
 //event listeners
-
 const renderHomeEvent = () => {
     homeLink().addEventListener('click', renderHomePage)
 }
@@ -253,6 +249,13 @@ const nameStartsWithEvent = () => {
 const messageHeroEvent = () => {
     messageHero().addEventListener('click', renderMessagePage)
 }
+
+const selectHeroEvent = () => {
+    messageHero().addEventListener('click', function() {
+        let sel = document.querySelectorAll('select')
+        M.FormSelect.init(sel, heroNames)
+    })
+} 
 
 const sendMessageEvent = () => {
     messageHeroForm().addEventListener('submit', countMessage)
@@ -274,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     browseHeroEvent()
     hideMessageCount()
     messageHeroEvent()
+    selectHeroEvent()
 
 })
 
